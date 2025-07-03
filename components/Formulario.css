@@ -1,0 +1,10 @@
+.form-group {
+  margin-bottom: 25px; /* Espacio fijo entre campos */
+}
+
+.error-message {
+  color: red;
+  font-size: 0.85em;
+  min-height: 1em; /* Espacio reservado, aunque no haya error */
+  margin-top: 3px;
+}
