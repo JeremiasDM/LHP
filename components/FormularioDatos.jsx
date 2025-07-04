@@ -3,7 +3,7 @@ import './Formulario.css';
 
 const estiloInput = {
   width: '100%',
-  padding: '8px',
+  padding: '10px',
   borderRadius: '5px',
   border: '1px solid #ccc',
   backgroundColor: '#0B0E19',
@@ -11,14 +11,15 @@ const estiloInput = {
 };
 
 const estiloBoton = {
-  padding: '10px',
+  padding: '10px 20px',
   margin: '5px',
   border: 'none',
-  borderRadius: '5px',
+  borderRadius: '8px',
+  fontWeight: 'bold',
   cursor: 'pointer'
 };
 
-const FormularioDatos = ({ datos, setDatos, setFase, handleCancelar }) => {
+const FormularioDatos = ({ datos, setDatos, setFase, handleCancelar, jugadores }) => {
   const [errores, setErrores] = useState({});
 
   const handleChange = (e) => {
@@ -37,13 +38,26 @@ const FormularioDatos = ({ datos, setDatos, setFase, handleCancelar }) => {
 
   const today = new Date().toISOString().split('T')[0];
 
-  const validarFase1 = () => {
-    const nuevosErrores = {};
-    if (!datos.nombre) nuevosErrores.nombre = 'Falta completar este campo';
-    if (!datos.apellido) nuevosErrores.apellido = 'Falta completar este campo';
-    if (!datos.dni) nuevosErrores.dni = 'Falta completar este campo';
+const validarFase1 = () => {
+  const nuevosErrores = {};
+  const listaJugadores = jugadores || []; 
+
+  if (!datos.nombre) nuevosErrores.nombre = 'Falta completar este campo';
+  if (!datos.apellido) nuevosErrores.apellido = 'Falta completar este campo';
+  if (!datos.dni) {
+    nuevosErrores.dni = 'Falta completar este campo';
+  } else if (datos.dni.length < 7) {
+    nuevosErrores.dni = 'El DNI debe tener al menos 7 números';
+  } else if (listaJugadores.some(j => j.dni === datos.dni)) {
+    nuevosErrores.dni = 'El DNI ya está registrado';
+  }
+
     if (!datos.domicilio) nuevosErrores.domicilio = 'Falta completar este campo';
-    if (!datos.telefono) nuevosErrores.telefono = 'Falta completar este campo';
+    if (!datos.telefono) {
+      nuevosErrores.telefono = 'Falta completar este campo';
+    } else if (datos.telefono.length < 7) {
+      nuevosErrores.telefono = 'El teléfono debe tener al menos 7 números';
+    }
     if (!datos.genero) nuevosErrores.genero = 'Falta completar este campo';
     if (!datos.localidad) nuevosErrores.localidad = 'Falta completar este campo';
     if (!datos.club) nuevosErrores.club = 'Falta completar este campo';
@@ -53,11 +67,7 @@ const FormularioDatos = ({ datos, setDatos, setFase, handleCancelar }) => {
       nuevosErrores.fechaNacimiento = 'La fecha no puede ser futura';
     }
 
-    if (datos.dni && datos.dni.length < 7) nuevosErrores.dni = 'El DNI debe tener al menos 7 números';
-    if (datos.telefono && datos.telefono.length < 7) nuevosErrores.telefono = 'El teléfono debe tener al menos 7 números';
-
     setErrores(nuevosErrores);
-
     return Object.keys(nuevosErrores).length === 0;
   };
 
@@ -68,7 +78,9 @@ const FormularioDatos = ({ datos, setDatos, setFase, handleCancelar }) => {
   };
 
   return (
-    <>
+    <div className="contenedor-principal">
+      <h2>Registro de Jugador</h2>
+
       {[
         { label: 'Nombre*', name: 'nombre', type: 'text' },
         { label: 'Apellido*', name: 'apellido', type: 'text' },
@@ -78,8 +90,9 @@ const FormularioDatos = ({ datos, setDatos, setFase, handleCancelar }) => {
         { label: 'Fecha de Nacimiento*', name: 'fechaNacimiento', type: 'date', max: today }
       ].map(({ label, name, type, max }) => (
         <div key={name} className="form-group">
-          <label>{label}</label>
+          <label htmlFor={name}>{label}</label>
           <input
+            id={name}
             type={type}
             name={name}
             value={datos[name] || ''}
@@ -87,15 +100,13 @@ const FormularioDatos = ({ datos, setDatos, setFase, handleCancelar }) => {
             style={estiloInput}
             max={max}
           />
-          <div className="error-message">
-            {errores[name]}
-          </div>
+          <div className="error-message">{errores[name]}</div>
         </div>
       ))}
 
       <div className="form-group">
-        <label>Género*</label>
-        <select name="genero" value={datos.genero} onChange={handleChange} style={estiloInput}>
+        <label htmlFor="genero">Género*</label>
+        <select id="genero" name="genero" value={datos.genero} onChange={handleChange} style={estiloInput}>
           <option value="" disabled>Seleccione un género</option>
           <option value="Masculino">Masculino</option>
           <option value="Femenino">Femenino</option>
@@ -104,8 +115,8 @@ const FormularioDatos = ({ datos, setDatos, setFase, handleCancelar }) => {
       </div>
 
       <div className="form-group">
-        <label>Localidad*</label>
-        <select name="localidad" value={datos.localidad} onChange={handleChange} style={estiloInput}>
+        <label htmlFor="localidad">Localidad*</label>
+        <select id="localidad" name="localidad" value={datos.localidad} onChange={handleChange} style={estiloInput}>
           <option value="" disabled>Seleccione una localidad</option>
           <option value="Localidad 1">Localidad 1</option>
           <option value="Localidad 2">Localidad 2</option>
@@ -115,23 +126,24 @@ const FormularioDatos = ({ datos, setDatos, setFase, handleCancelar }) => {
       </div>
 
       <div className="form-group">
-        <label>Club*</label>
-        <select name="club" value={datos.club} onChange={handleChange} style={estiloInput}>
+        <label htmlFor="club">Club*</label>
+        <select id="club" name="club" value={datos.club} onChange={handleChange} style={estiloInput}>
           <option value="" disabled>Seleccione un club</option>
           <option value="Club A">Club A</option>
           <option value="Club B">Club B</option>
           <option value="Club C">Club C</option>
         </select>
         <div className="error-message">{errores.club}</div>
-       </div>
+      </div>
 
-      <button onClick={handleSiguiente} style={{ ...estiloBoton, backgroundColor: 'green', color: '#fff' }}>
+      <button onClick={handleSiguiente} style={{ ...estiloBoton, backgroundColor: 'green', color: '#FFFFFF' }}>
         Siguiente
       </button>
-      <button onClick={handleCancelar} style={{ ...estiloBoton, backgroundColor: 'red', color: '#fff' }}>
+      <button onClick={handleCancelar} style={{ ...estiloBoton, backgroundColor: 'red', color: '#FFFFFF' }}>
         Cancelar
       </button>
-    </>
+    </div>
   );
 };
+
 export default FormularioDatos;

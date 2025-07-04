@@ -1,7 +1,7 @@
 import React from 'react';
 
 const estiloInput = {
-  width: '100%',
+  width: '90%',
   padding: '8px',
   margin: '5px 0',
   borderRadius: '5px',
@@ -65,13 +65,13 @@ const FormularioDocumentacion = ({
         <div style={estiloCaja}>
           <strong>📇 Carnet*</strong>
           <input type="file" name="carnet" accept="image/*" onChange={handleFileChange} style={estiloInput} />
-          {previewCarnet && <img src={previewCarnet} alt="Previsualización carnet" style={{ maxWidth: '100%', maxHeight: '200px', marginTop: '5px' }} />}
+          {previewCarnet && <img src={previewCarnet} alt="Previsualización carnet" style={{ maxWidth: '200%', maxHeight: '200px', marginTop: '5px' }} />}
         </div>
 
         <div style={estiloCaja}>
           <strong>🏥 Ficha Médica*</strong>
           <input type="file" name="ficha" accept="image/*" onChange={handleFileChange} style={estiloInput} />
-          {previewFicha && <img src={previewFicha} alt="Previsualización ficha" style={{ maxWidth: '100%', maxHeight: '200px', marginTop: '5px' }} />}
+          {previewFicha && <img src={previewFicha} alt="Previsualización ficha" style={{ maxWidth: '200%', maxHeight: '200px', marginTop: '5px' }} />}
 
           <label style={{ display: 'block', marginTop: '10px' }}>Fecha de vencimiento*</label>
           <input

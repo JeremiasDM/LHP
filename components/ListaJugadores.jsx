@@ -1,86 +1,143 @@
 import React, { useState } from 'react';
 
-const ListaJugadores = ({ jugadores, onEditar, onEliminar }) => {
+const ListaJugadores = ({
+  jugadores,
+  onEditar,
+  onEliminar,
+  onActualizarFicha,
+  onAgregarSancion
+}) => {
+  const [filtroCategoria, setFiltroCategoria] = useState('');
   const [filtroClub, setFiltroClub] = useState('');
+  const [editandoId, setEditandoId] = useState(null);
+  const [nuevaFicha, setNuevaFicha] = useState({});
 
-  const hoy = new Date().toISOString().split('T')[0];
+  const today = new Date().toISOString().split('T')[0];
 
-  // Obtener clubes únicos para el filtro
-  const clubsUnicos = [...new Set(jugadores.map(j => j.club))];
+  const filtrados = jugadores.filter(j =>
+    (filtroCategoria ? j.categoria === filtroCategoria : true) &&
+    (filtroClub ? j.club === filtroClub : true)
+  );
 
-  // Aplicar filtro
-  const jugadoresFiltrados = filtroClub
-    ? jugadores.filter(j => j.club === filtroClub)
-    : jugadores;
+  const handleGuardarFicha = (j) => {
+    if (nuevaFicha[j.dni]?.file && nuevaFicha[j.dni]?.vencimiento) {
+      onActualizarFicha(j.dni, nuevaFicha[j.dni].file, nuevaFicha[j.dni].vencimiento);
+      setEditandoId(null);
+      setNuevaFicha(prev => {
+        const nuevo = { ...prev };
+        delete nuevo[j.dni];
+        return nuevo;
+      });
+    } else {
+      alert('Debe seleccionar archivo y fecha');
+    }
+  };
 
   return (
-    <div style={{ marginBottom: '20px' }}>
-      <h3>Lista de jugadores</h3>
+    <div>
+      <div style={{ marginBottom: '10px' }}>
+        <label>Filtrar por categoría: </label>
+        <select
+          value={filtroCategoria}
+          onChange={(e) => setFiltroCategoria(e.target.value)}
+          style={{ marginRight: '10px' }}
+        >
+          <option value="">Todas</option>
+          <option value="Masculino">Masculino</option>
+          <option value="Femenino">Femenino</option>
+        </select>
 
-      {/* Filtro por club */}
-      {clubsUnicos.length > 0 && (
-        <div style={{ marginBottom: '10px' }}>
-          <label>Filtrar por club:</label>
-          <select
-            value={filtroClub}
-            onChange={(e) => setFiltroClub(e.target.value)}
-            style={{ marginLeft: '5px', padding: '5px' }}
-          >
-            <option value="">Todos</option>
-            {clubsUnicos.map((club, index) => (
-              <option key={index} value={club}>{club}</option>
-            ))}
-          </select>
-        </div>
-      )}
+        <label>Filtrar por club: </label>
+        <select
+          value={filtroClub}
+          onChange={(e) => setFiltroClub(e.target.value)}
+        >
+          <option value="">Todos</option>
+          {[...new Set(jugadores.map(j => j.club))].map(club => (
+            <option key={club} value={club}>{club}</option>
+          ))}
+        </select>
+      </div>
 
-      {jugadoresFiltrados.length === 0 ? (
-        <p>No hay jugadores para mostrar.</p>
-      ) : (
-        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-          <thead>
-            <tr style={{ backgroundColor: '#0B0E19', color: '#FFFFFF' }}>
-              <th style={{ border: '1px solid #ccc', padding: '5px' }}>Nombre</th>
-              <th style={{ border: '1px solid #ccc', padding: '5px' }}>Apellido</th>
-              <th style={{ border: '1px solid #ccc', padding: '5px' }}>DNI</th>
-              <th style={{ border: '1px solid #ccc', padding: '5px' }}>Club</th>
-              <th style={{ border: '1px solid #ccc', padding: '5px' }}>Estado ficha</th>
-              <th style={{ border: '1px solid #ccc', padding: '5px' }}>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {jugadoresFiltrados.map((jugador, index) => (
-              <tr key={index}>
-                <td style={{ border: '1px solid #ccc', padding: '5px' }}>{jugador.nombre}</td>
-                <td style={{ border: '1px solid #ccc', padding: '5px' }}>{jugador.apellido}</td>
-                <td style={{ border: '1px solid #ccc', padding: '5px' }}>{jugador.dni}</td>
-                <td style={{ border: '1px solid #ccc', padding: '5px' }}>{jugador.club}</td>
-                <td style={{ border: '1px solid #ccc', padding: '5px' }}>
-                  {jugador.vencimientoFicha && jugador.vencimientoFicha < hoy ? (
+      <table style={{ width: '100%', background: '#1F3C88', color: '#fff', borderCollapse: 'collapse' }}>
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>DNI</th>
+            <th>Club</th>
+            <th>Categoría</th>
+            <th>Ficha Médica</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {filtrados.map(j => (
+            <tr key={j.dni}>
+              <td>{j.nombre} {j.apellido}</td>
+              <td>{j.dni}</td>
+              <td>{j.club}</td>
+              <td>{j.categoria}</td>
+              <td>
+                {j.vencimientoFicha ? (
+                  j.vencimientoFicha < today ? (
                     <span style={{ color: 'red' }}>⚠ Vencida</span>
                   ) : (
-                    <span style={{ color: 'lightgreen' }}>Vigente</span>
-                  )}
-                </td>
-                <td style={{ border: '1px solid #ccc', padding: '5px' }}>
-                  <button
-                    onClick={() => onEditar(jugador)}
-                    style={{ marginRight: '5px', padding: '3px 6px' }}
-                  >
-                    Editar
-                  </button>
-                  <button
-                    onClick={() => onEliminar(jugador.dni)}
-                    style={{ padding: '3px 6px', backgroundColor: 'red', color: 'white' }}
-                  >
-                    Eliminar
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+                    <span style={{ color: 'white' }}>{j.vencimientoFicha}</span>
+                  )
+                ) : 'Sin ficha'}
+              </td>
+              <td>
+                {editandoId === j.dni ? (
+                  <div style={{ display: 'flex', flexDirection: 'column' }}>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) =>
+                        setNuevaFicha(prev => ({
+                          ...prev,
+                          [j.dni]: {
+                            ...prev[j.dni],
+                            file: e.target.files[0]
+                          }
+                        }))
+                      }
+                      style={{ marginBottom: '5px' }}
+                    />
+                    <input
+                      type="date"
+                      onChange={(e) =>
+                        setNuevaFicha(prev => ({
+                          ...prev,
+                          [j.dni]: {
+                            ...prev[j.dni],
+                            vencimiento: e.target.value
+                          }
+                        }))
+                      }
+                      style={{ backgroundColor: '#FFFFFF', color: '#000', marginBottom: '5px' }}
+                    />
+                    <div>
+                      <button onClick={() => handleGuardarFicha(j)} style={{ marginRight: '5px' }}>Guardar</button>
+                      <button onClick={() => setEditandoId(null)}>Cancelar</button>
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    <button onClick={() => setEditandoId(j.dni)} style={{ marginRight: '5px' }}>
+                      Actualizar Ficha
+                    </button>
+                    <button onClick={() => onEditar(j)} style={{ marginRight: '5px' }}>Editar</button>
+                    <button onClick={() => onEliminar(j.dni)} style={{ marginRight: '5px' }}>Desactivar</button>
+                    <button onClick={() => onAgregarSancion(j.dni, 'Amarilla')} style={{ marginRight: '2px' }}>Amarilla</button>
+                    <button onClick={() => onAgregarSancion(j.dni, '2 Min')} style={{ marginRight: '2px' }}>2 Min</button>
+                    <button onClick={() => onAgregarSancion(j.dni, 'Roja')}>Roja</button>
+                  </>
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };

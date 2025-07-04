@@ -6,7 +6,7 @@ import ListaJugadores from './ListaJugadores';
 
 const RegistroJugador = () => {
   const [fase, setFase] = useState(1);
-  const [modo, setModo] = useState(null); // null = nada, 'registro' o 'edicion'
+  const [modo, setModo] = useState(null);
   const [datos, setDatos] = useState(jugadorVacio());
   const [jugadores, setJugadores] = useState([]);
   const [previewCarnet, setPreviewCarnet] = useState(null);
@@ -17,15 +17,16 @@ const RegistroJugador = () => {
       nombre: '',
       apellido: '',
       dni: '',
-      domicilio: '',
       telefono: '',
       genero: '',
       localidad: '',
       club: '',
+      categoria: '',
       fechaNacimiento: '',
       carnet: null,
       ficha: null,
-      vencimientoFicha: ''
+      vencimientoFicha: '',
+      sanciones: []
     };
   }
 
@@ -80,10 +81,10 @@ const RegistroJugador = () => {
   };
 
   const handleEliminar = (dni) => {
-    if (window.confirm('¿Está seguro que desea eliminar este jugador?')) {
+    if (window.confirm('¿Está seguro que desea desactivar este jugador?')) {
       const actualizados = jugadores.filter(j => j.dni !== dni);
       setJugadores(actualizados);
-      alert('Jugador eliminado');
+      alert('Jugador desactivado');
     }
   };
 
@@ -93,6 +94,26 @@ const RegistroJugador = () => {
     setFase(1);
     setPreviewCarnet(null);
     setPreviewFicha(null);
+  };
+
+  const handleActualizarFichaDirecto = (dni, nuevaFicha, nuevoVencimiento) => {
+    const actualizados = jugadores.map(j =>
+      j.dni === dni
+        ? { ...j, ficha: nuevaFicha, vencimientoFicha: nuevoVencimiento }
+        : j
+    );
+    setJugadores(actualizados);
+    alert('Ficha médica actualizada');
+  };
+
+  const handleAgregarSancion = (dni, tipo) => {
+    const actualizados = jugadores.map(j =>
+      j.dni === dni
+        ? { ...j, sanciones: [...(j.sanciones || []), tipo] }
+        : j
+    );
+    setJugadores(actualizados);
+    alert(`Sanción "${tipo}" agregada`);
   };
 
   return (
@@ -108,7 +129,6 @@ const RegistroJugador = () => {
         <>
           <h2>{modo === 'registro' ? 'Registrar Jugador' : 'Editar Jugador'}</h2>
           <BarraProgreso fase={fase} />
-
           {fase === 1 && (
             <FormularioDatos
               datos={datos}
@@ -116,9 +136,9 @@ const RegistroJugador = () => {
               setFase={setFase}
               handleCancelar={handleCancelar}
               modo={modo}
+              jugadores={jugadores}
             />
           )}
-
           {fase === 2 && (
             <FormularioDocumentacion
               datos={datos}
@@ -145,8 +165,11 @@ const RegistroJugador = () => {
           </button>
           <ListaJugadores
             jugadores={jugadores}
+            setJugadores={setJugadores}
             onEditar={handleEditar}
             onEliminar={handleEliminar}
+            onActualizarFicha={handleActualizarFichaDirecto}
+            onAgregarSancion={handleAgregarSancion}
           />
         </>
       )}
