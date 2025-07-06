@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Club</title>
+    <link rel="stylesheet" href="editarclubes.css">
+    </head>
+
+<body>
+    <div class="edit-container">
+        <div class="edit-header">
+            <div class="window-controls">
+                <div class="hamburger-menu">
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                </div>
+                <div class="control-buttons">
+                    <button class="minimize-btn"></button>
+                    <button class="maximize-btn"></button>
+                    <button class="close-btn"></button>
+                </div>
+            </div>
+            <img src="Logo_Handball.png" alt="Logo Liga Handball" class="logo-liga-edit">
+            <h2>Editar Club</h2>
+        </div>
+
+        <div class="form-section">
+            <h3>Información del Club</h3>
+            <div class="input-group">
+                <div class="input-item">
+                    <label for="nombreClub">Nombre del club *</label>
+                    <input type="text" id="nombreClub" placeholder="Ingresar Nombre">
+                </div>
+                <div class="input-item">
+                    <label for="localidad">Localidad *</label>
+                    <input type="text" id="localidad" placeholder="Ingresar Localidad">
+                </div>
+                <div class="input-item">
+                    <label for="fechaRegistro">Fecha de registro *</label>
+                    <input type="text" id="fechaRegistro" placeholder="Ingresar Fecha">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h3>Información del referente</h3>
+            <div class="input-group">
+                <div class="input-item">
+                    <label for="nombreReferente">Nombre referente *</label>
+                    <input type="text" id="nombreReferente" placeholder="Ingresar Nombre">
+                </div>
+                <div class="input-item">
+                    <label for="dni">DNI *</label>
+                    <input type="text" id="dni" placeholder="Ingresar DNI">
+                </div>
+                <div class="input-item">
+                    <label for="telefono">Teléfono *</label>
+                    <input type="text" id="telefono" placeholder="Ingresar Teléfono">
+                </div>
+            </div>
+            <div class="input-group full-width">
+                <div class="input-item">
+                    <label for="email">E-mail *</label>
+                    <input type="email" id="email" placeholder="Ingresar Email">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h3>Logo del club</h3>
+            <div class="logo-upload-section">
+                <div class="logo-placeholder">
+                    <img src="placeholder_logo.png" alt="Logo" class="uploaded-logo">
+                    <span class="delete-icon"></span>
+                </div>
+                <div class="upload-icon-container">
+                    <label for="logoUpload" class="upload-label">
+                        <img src="upload_icon.png" alt="Upload" class="upload-icon">
+                    </label>
+                    <input type="file" id="logoUpload" accept="image/*" style="display: none;">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button class="btn-cancel">Cancelar</button>
+            <button class="btn-register">Registrar</button>
+        </div>
+
+        <div class="modal-overlay" id="confirmModal">
+            <div class="modal-content">
+                <p>¿Desea editar el club <span class="club-name-placeholder">(nombre del club a editar)</span>?</p>
+                <div class="modal-buttons">
+                    <button class="btn-cancel-modal" id="cancelConfirm">Cancelar</button>
+                    <button class="btn-register-modal" id="confirmEdit">Registrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const registerButton = document.querySelector('.btn-register');
+            const confirmModal = document.getElementById('confirmModal');
+            const cancelConfirmButton = document.getElementById('cancelConfirm');
+            const confirmEditButton = document.getElementById('confirmEdit');
+            const clubNameInput = document.getElementById('nombreClub');
+            const clubNamePlaceholder = document.querySelector('.club-name-placeholder');
+
+            // Show the confirmation modal when "Registrar" is clicked
+            registerButton.addEventListener('click', (event) => {
+                event.preventDefault(); // Prevent default form submission
+                const clubName = clubNameInput.value.trim();
+                if (clubName) {
+                    clubNamePlaceholder.textContent = `(${clubName})`;
+                } else {
+                    clubNamePlaceholder.textContent = `(sin nombre)`;
+                }
+                confirmModal.classList.add('show');
+            });
+
+            // Hide the modal when "Cancelar" in the modal is clicked
+            cancelConfirmButton.addEventListener('click', () => {
+                confirmModal.classList.remove('show');
+            });
+
+            // Handle "Registrar" in the modal (e.g., submit form or perform action)
+            confirmEditButton.addEventListener('click', () => {
+                alert('Club editado (simulado)'); // Replace with actual form submission logic
+                confirmModal.classList.remove('show');
+            });
+
+            // Optionally, hide modal if clicking outside
+            confirmModal.addEventListener('click', (event) => {
+                if (event.target === confirmModal) {
+                    confirmModal.classList.remove('show');
+                }
+            });
+
+            // Simple delete icon for logo placeholder (visual only)
+            const logoPlaceholder = document.querySelector('.logo-placeholder');
+            const deleteIcon = document.querySelector('.delete-icon');
+            const uploadedLogo = document.querySelector('.uploaded-logo');
+            const logoUploadInput = document.getElementById('logoUpload');
+
+            // Simulate logo upload (you'd replace this with actual file handling)
+            logoUploadInput.addEventListener('change', (event) => {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        uploadedLogo.src = e.target.result;
+                        deleteIcon.style.visibility = 'visible';
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // Simulate logo deletion
+            deleteIcon.addEventListener('click', () => {
+                uploadedLogo.src = 'placeholder_logo.png'; // Reset to a default placeholder or empty
+                deleteIcon.style.visibility = 'hidden';
+                logoUploadInput.value = ''; // Clear the file input
+            });
+
+            // Initial state: If a logo is already present, show delete icon
+            if (uploadedLogo.src && uploadedLogo.src.includes('placeholder_logo.png') === false) {
+                deleteIcon.style.visibility = 'visible';
+            }
+        });
+    </script>
+</body>
+
+</html>

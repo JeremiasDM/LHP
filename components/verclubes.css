@@ -1,0 +1,218 @@
+/* Estilos generales del body */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #0d0e15; /* Dark background */
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Full viewport height */
+    overflow: hidden; /* Prevent body scroll, container will handle if needed */
+}
+
+/* Contenedor principal */
+.ver-container {
+    background-color: #1c2a5c; /* Blue dark background */
+    padding: 20px 30px; /* Adjusted padding */
+    border-radius: 15px;
+    text-align: center;
+    width: 90%;
+    max-width: 1000px; /* Max width for the main container */
+    height: 95vh; /* Adjusted height to fill most of the screen */
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5); /* Added shadow */
+    display: flex;
+    flex-direction: column; /* Arrange content vertically */
+    position: relative; /* For absolute positioning of window controls */
+    box-sizing: border-box; /* Include padding in height */
+}
+
+/* Top Window Controls (Hamburger Menu, Minimize, Maximize, Close) */
+.main-window-controls {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: calc(100% - 20px); /* Span full width minus padding */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 10; /* Ensure it's on top */
+}
+
+.hamburger-menu {
+    cursor: pointer;
+    padding: 8px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    background-color: #2b3d70; /* Background to match theme */
+    border-radius: 5px;
+}
+
+.hamburger-menu .line {
+    width: 20px;
+    height: 3px;
+    background-color: #fff;
+    border-radius: 2px;
+}
+
+.control-buttons {
+    display: flex;
+    gap: 5px;
+}
+
+.control-buttons button {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+}
+
+.minimize-btn {
+    background-color: #ffbd4a; /* Yellow */
+}
+
+.maximize-btn {
+    background-color: #28c940; /* Green */
+}
+
+.close-btn {
+    background-color: #ff605c; /* Red */
+}
+
+
+/* Header section for the "Ver Clubes" title and logo */
+.ver-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 30px; /* Space for the window controls above */
+    margin-bottom: 20px;
+    position: relative; /* For relative positioning of elements */
+}
+
+.ver-header .logo-liga {
+    width: 70px; /* Consistent logo size */
+    height: auto;
+    margin-bottom: 10px; /* Space between logo and title */
+}
+
+.ver-header h2 {
+    margin: 0;
+    font-size: 24px;
+    color: #fff;
+}
+
+/* Contenedor principal de contenido (lado izquierdo y derecho) */
+.contenido {
+    display: flex;
+    flex-grow: 1; /* Allow content to take available vertical space */
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 30px; /* Space between left and right panels */
+    margin-top: 20px;
+    margin-bottom: 20px; /* Space before footer */
+}
+
+/* Cuadro donde se mostrarán los clubes (left panel) */
+.cuadro-clubes {
+    background-color: #2b3d70; /* Darker blue background */
+    width: 65%; /* Adjusted width for the large box */
+    height: auto; /* Auto height to fill available space */
+    min-height: 450px; /* Minimum height to ensure it's substantial */
+    border-radius: 10px;
+    overflow-y: auto; /* Enable scrolling for content */
+    box-sizing: border-box; /* Include padding/border in dimensions */
+}
+
+/* Lado derecho con buscador y botones */
+.lado-derecho {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 20px;
+    width: 30%; /* Adjusted width for the right panel */
+    flex-shrink: 0; /* Prevent shrinking below content */
+}
+
+/* Search input container with icon */
+.search-input-container {
+    position: relative;
+    width: 100%;
+}
+
+.buscador {
+    padding: 10px 40px 10px 15px; /* Adjust padding for icon */
+    width: 100%;
+    border-radius: 20px; /* More rounded search bar */
+    border: none;
+    background-color: #3b4d7c; /* Darker background for inputs */
+    color: #fff;
+    font-size: 15px;
+    box-sizing: border-box; /* Include padding in width */
+}
+
+.buscador::placeholder {
+    color: #aaa;
+}
+
+.search-icon {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #ccc;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+/* Contenedor de botones */
+.acciones {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+}
+
+/* Botón verde (Modificar, Añadir, Alta, Baja) */
+.btn-verde {
+    background-color: #00cc66; /* Green */
+    border: none;
+    color: white;
+    padding: 10px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+    transition: background 0.3s ease;
+}
+
+.btn-verde:hover {
+    background-color: #00994d; /* Darker green on hover */
+}
+
+/* Footer Links */
+.footer-links {
+    margin-top: auto; /* Pushes footer to the bottom */
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px 25px; /* Row and column gap */
+    font-size: 13px;
+    color: #ccc; /* Default color for footer text */
+}
+
+.footer-links a {
+    color: #ccc;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+    color: #fff;
+}
