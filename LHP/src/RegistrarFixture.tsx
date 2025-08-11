@@ -1,71 +1,66 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import type { Fixture, Encuentro } from "./types";
 
-const RegistrarFixture = ({ agregarJornada }) => {
-  const [fecha, setFecha] = useState('');
-  const [hora, setHora] = useState('');
-  const [lugar, setLugar] = useState('');
-  const [partidos, setPartidos] = useState([]);
-  const [nuevoPartido, setNuevoPartido] = useState({ equipoA: '', equipoB: '', categoria: '', arbitro: '' });
+type Props = {
+  onAgregarFixture: (fixture: Fixture) => void;
+};
 
-  const handleAgregarPartido = () => {
-    if (!nuevoPartido.equipoA || !nuevoPartido.equipoB || !nuevoPartido.categoria || !nuevoPartido.arbitro) {
-      alert('Todos los campos del partido son obligatorios');
-      return;
-    }
-    setPartidos([...partidos, nuevoPartido]);
-    setNuevoPartido({ equipoA: '', equipoB: '', categoria: '', arbitro: '' });
+const RegistrarFixture: React.FC<Props> = ({ onAgregarFixture }) => {
+  const [fixture, setFixture] = useState<Fixture>({ fecha: "", lugar: "", partidos: [] });
+  const [partidoTemp, setPartidoTemp] = useState<Encuentro>({ jornada: 1, grupo: "A", club1: "", club2: "", resultado: "" });
+
+  const handleChangeFixture = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFixture({ ...fixture, [e.target.name]: e.target.value });
   };
 
-  const handleGuardarJornada = () => {
-    if (!fecha || !hora || !lugar || partidos.length === 0) {
-      alert('Completa todos los campos y agrega al menos un partido');
+  const handleChangePartido = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setPartidoTemp({ ...partidoTemp, [name]: name === "jornada" ? Number(value) : value });
+  };
+
+  const agregarPartido = () => {
+    if (!partidoTemp.club1 || !partidoTemp.club2 || !partidoTemp.resultado) {
+      alert("Completa todos los campos del partido.");
       return;
     }
-    const jornada = {
-      fecha,
-      hora,
-      lugar,
-      partidos: partidos.map(p => ({ ...p, golesEquipoA: null, golesEquipoB: null, puntosEquipoA: 0, puntosEquipoB: 0, mvp: '', estado: 'Programado' }))
-    };
-    agregarJornada(jornada);
-    setFecha('');
-    setHora('');
-    setLugar('');
-    setPartidos([]);
+    setFixture({ ...fixture, partidos: [...fixture.partidos, partidoTemp] });
+    setPartidoTemp({ jornada: 1, grupo: "A", club1: "", club2: "", resultado: "" });
+  };
+
+  const guardarFixture = () => {
+    if (!fixture.fecha || !fixture.lugar || fixture.partidos.length === 0) {
+      alert("Completa todos los campos obligatorios.");
+      return;
+    }
+    onAgregarFixture(fixture);
+    setFixture({ fecha: "", lugar: "", partidos: [] });
   };
 
   return (
-    <div style={{ backgroundColor: '#1F3C88', padding: '20px', borderRadius: '10px', color: 'white' }}>
-      <h2>Registrar Jornada</h2>
-
-      <label>Fecha:</label>
-      <input type="date" value={fecha} onChange={e => setFecha(e.target.value)} /><br />
-
-      <label>Hora de inicio:</label>
-      <input type="time" value={hora} onChange={e => setHora(e.target.value)} /><br />
-
-      <label>Lugar:</label>
-      <input type="text" value={lugar} onChange={e => setLugar(e.target.value)} /><br />
+    <div>
+      <h3>Registrar Fixture</h3>
+      <input name="fecha" type="date" value={fixture.fecha} onChange={handleChangeFixture} />
+      <input name="lugar" placeholder="Lugar" value={fixture.lugar} onChange={handleChangeFixture} />
 
       <h4>Agregar Partido</h4>
-      <input placeholder="Equipo A" value={nuevoPartido.equipoA} onChange={e => setNuevoPartido({ ...nuevoPartido, equipoA: e.target.value })} />
-      <input placeholder="Equipo B" value={nuevoPartido.equipoB} onChange={e => setNuevoPartido({ ...nuevoPartido, equipoB: e.target.value })} />
-      <select value={nuevoPartido.categoria} onChange={e => setNuevoPartido({ ...nuevoPartido, categoria: e.target.value })}>
-        <option value="" disabled>Seleccionar categoría</option>
-        <option value="Masculino">Masculino</option>
-        <option value="Femenino">Femenino</option>
+      <input name="jornada" type="number" placeholder="Jornada" value={partidoTemp.jornada} onChange={handleChangePartido} />
+      <select name="grupo" value={partidoTemp.grupo} onChange={handleChangePartido}>
+        <option value="A">Grupo A</option>
+        <option value="B">Grupo B</option>
       </select>
-      <input placeholder="Árbitro" value={nuevoPartido.arbitro} onChange={e => setNuevoPartido({ ...nuevoPartido, arbitro: e.target.value })} />
-      <button onClick={handleAgregarPartido}>Agregar partido</button>
+      <input name="club1" placeholder="Club 1" value={partidoTemp.club1} onChange={handleChangePartido} />
+      <input name="club2" placeholder="Club 2" value={partidoTemp.club2} onChange={handleChangePartido} />
+      <input name="resultado" placeholder="Resultado (ej: 25-21)" value={partidoTemp.resultado} onChange={handleChangePartido} />
 
-      <h5>Partidos agregados:</h5>
+      <button onClick={agregarPartido}>Agregar Partido</button>
       <ul>
-        {partidos.map((p, i) => (
-          <li key={i}>{p.equipoA} vs {p.equipoB} - {p.categoria} - Árbitro: {p.arbitro}</li>
+        {fixture.partidos.map((p, i) => (
+          <li key={i}>Jornada {p.jornada} | Grupo {p.grupo}: {p.club1} vs {p.club2} ({p.resultado})</li>
         ))}
       </ul>
-
-      <button onClick={handleGuardarJornada} style={{ marginTop: '10px', backgroundColor: 'green', color: 'white' }}>Guardar Jornada</button>
+      <button onClick={guardarFixture}>Guardar Fixture</button>
     </div>
   );
 };
+
+export default RegistrarFixture;
