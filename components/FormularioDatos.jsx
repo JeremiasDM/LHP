@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import './Formulario.css';
+import React, { useState } from "react";
 
 const estiloInput = {
   width: '100%',
@@ -8,6 +7,11 @@ const estiloInput = {
   border: '1px solid #ccc',
   backgroundColor: '#0B0E19',
   color: '#FFFFFF'
+};
+
+const estiloInputError = {
+  ...estiloInput,
+  border: '2px solid #ff4d4f'
 };
 
 const estiloBoton = {
@@ -19,130 +23,171 @@ const estiloBoton = {
   cursor: 'pointer'
 };
 
+const clubes = ["Club A", "Club B", "Club C"]; // Puedes pasarlos como prop si lo prefieres
+const localidades = ["Localidad 1", "Localidad 2", "Localidad 3"]; // Igual que arriba
+
 const FormularioDatos = ({ datos, setDatos, setFase, handleCancelar, jugadores }) => {
   const [errores, setErrores] = useState({});
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
-    if (name === 'nombre' || name === 'apellido') {
-      if (!/^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]*$/.test(value)) return;
-    }
-    if (name === 'dni' || name === 'telefono') {
-      if (!/^\d*$/.test(value)) return;
-    }
-
-    setDatos({ ...datos, [name]: value });
-    setErrores({ ...errores, [name]: '' });
+    setDatos((prev) => ({ ...prev, [name]: value }));
+    setErrores((prev) => ({ ...prev, [name]: undefined }));
   };
 
   const today = new Date().toISOString().split('T')[0];
 
-const validarFase1 = () => {
-  const nuevosErrores = {};
-  const listaJugadores = jugadores || []; 
-
-  if (!datos.nombre) nuevosErrores.nombre = 'Falta completar este campo';
-  if (!datos.apellido) nuevosErrores.apellido = 'Falta completar este campo';
-  if (!datos.dni) {
-    nuevosErrores.dni = 'Falta completar este campo';
-  } else if (datos.dni.length < 7) {
-    nuevosErrores.dni = 'El DNI debe tener al menos 7 números';
-  } else if (listaJugadores.some(j => j.dni === datos.dni)) {
-    nuevosErrores.dni = 'El DNI ya está registrado';
-  }
-
-    if (!datos.domicilio) nuevosErrores.domicilio = 'Falta completar este campo';
-    if (!datos.telefono) {
-      nuevosErrores.telefono = 'Falta completar este campo';
-    } else if (datos.telefono.length < 7) {
-      nuevosErrores.telefono = 'El teléfono debe tener al menos 7 números';
-    }
-    if (!datos.genero) nuevosErrores.genero = 'Falta completar este campo';
-    if (!datos.localidad) nuevosErrores.localidad = 'Falta completar este campo';
-    if (!datos.club) nuevosErrores.club = 'Falta completar este campo';
-    if (!datos.fechaNacimiento) {
-      nuevosErrores.fechaNacimiento = 'Falta completar este campo';
-    } else if (datos.fechaNacimiento > today) {
-      nuevosErrores.fechaNacimiento = 'La fecha no puede ser futura';
-    }
-
+  const validarFase1 = () => {
+    const nuevosErrores = {};
+    if (!datos.nombre || datos.nombre.length < 2) nuevosErrores.nombre = "Nombre requerido";
+    if (!datos.apellido || datos.apellido.length < 2) nuevosErrores.apellido = "Apellido requerido";
+    if (!datos.dni || !/^\d{7,8}$/.test(datos.dni)) nuevosErrores.dni = "DNI inválido";
+    if (jugadores && jugadores.some(j => j.dni === datos.dni)) nuevosErrores.dni = "DNI duplicado";
+    if (!datos.fechaNacimiento) nuevosErrores.fechaNacimiento = "Fecha requerida";
+    if (!datos.club) nuevosErrores.club = "Club requerido";
+    if (!datos.localidad) nuevosErrores.localidad = "Localidad requerida";
+    if (!datos.telefono || !/^\d{8,}$/.test(datos.telefono)) nuevosErrores.telefono = "Teléfono inválido";
     setErrores(nuevosErrores);
     return Object.keys(nuevosErrores).length === 0;
   };
 
-  const handleSiguiente = () => {
-    if (validarFase1()) {
-      setFase(2);
-    }
+  const handleSiguiente = (e) => {
+    e.preventDefault();
+    if (validarFase1()) setFase(2);
   };
 
   return (
-    <div className="contenedor-principal">
-      <h2>Registro de Jugador</h2>
-
-      {[
-        { label: 'Nombre*', name: 'nombre', type: 'text' },
-        { label: 'Apellido*', name: 'apellido', type: 'text' },
-        { label: 'DNI*', name: 'dni', type: 'text' },
-        { label: 'Domicilio*', name: 'domicilio', type: 'text' },
-        { label: 'Teléfono*', name: 'telefono', type: 'text' },
-        { label: 'Fecha de Nacimiento*', name: 'fechaNacimiento', type: 'date', max: today }
-      ].map(({ label, name, type, max }) => (
-        <div key={name} className="form-group">
-          <label htmlFor={name}>{label}</label>
-          <input
-            id={name}
-            type={type}
-            name={name}
-            value={datos[name] || ''}
-            onChange={handleChange}
-            style={estiloInput}
-            max={max}
-          />
-          <div className="error-message">{errores[name]}</div>
-        </div>
-      ))}
-
-      <div className="form-group">
-        <label htmlFor="genero">Género*</label>
-        <select id="genero" name="genero" value={datos.genero} onChange={handleChange} style={estiloInput}>
-          <option value="" disabled>Seleccione un género</option>
-          <option value="Masculino">Masculino</option>
-          <option value="Femenino">Femenino</option>
-        </select>
-        <div className="error-message">{errores.genero}</div>
+    <form onSubmit={handleSiguiente} aria-label="Formulario de datos personales">
+      <div>
+        <label htmlFor="nombre">Nombre*</label>
+        <input
+          id="nombre"
+          name="nombre"
+          type="text"
+          value={datos.nombre || ""}
+          onChange={handleChange}
+          style={errores.nombre ? estiloInputError : estiloInput}
+          aria-required="true"
+          aria-describedby={errores.nombre ? "error-nombre" : undefined}
+        />
+        {errores.nombre && <span id="error-nombre" style={{ color: "#ff4d4f" }}>{errores.nombre}</span>}
       </div>
-
-      <div className="form-group">
-        <label htmlFor="localidad">Localidad*</label>
-        <select id="localidad" name="localidad" value={datos.localidad} onChange={handleChange} style={estiloInput}>
-          <option value="" disabled>Seleccione una localidad</option>
-          <option value="Localidad 1">Localidad 1</option>
-          <option value="Localidad 2">Localidad 2</option>
-          <option value="Localidad 3">Localidad 3</option>
-        </select>
-        <div className="error-message">{errores.localidad}</div>
+      <div>
+        <label htmlFor="apellido">Apellido*</label>
+        <input
+          id="apellido"
+          name="apellido"
+          type="text"
+          value={datos.apellido || ""}
+          onChange={handleChange}
+          style={errores.apellido ? estiloInputError : estiloInput}
+          aria-required="true"
+          aria-describedby={errores.apellido ? "error-apellido" : undefined}
+        />
+        {errores.apellido && <span id="error-apellido" style={{ color: "#ff4d4f" }}>{errores.apellido}</span>}
       </div>
-
-      <div className="form-group">
+      <div>
+        <label htmlFor="dni">DNI*</label>
+        <input
+          id="dni"
+          name="dni"
+          type="text"
+          value={datos.dni || ""}
+          onChange={handleChange}
+          style={errores.dni ? estiloInputError : estiloInput}
+          aria-required="true"
+          aria-describedby={errores.dni ? "error-dni" : undefined}
+        />
+        {errores.dni && <span id="error-dni" style={{ color: "#ff4d4f" }}>{errores.dni}</span>}
+      </div>
+      <div>
+        <label htmlFor="fechaNacimiento">Fecha de nacimiento*</label>
+        <input
+          id="fechaNacimiento"
+          name="fechaNacimiento"
+          type="date"
+          value={datos.fechaNacimiento || ""}
+          onChange={handleChange}
+          max={today}
+          style={errores.fechaNacimiento ? estiloInputError : estiloInput}
+          aria-required="true"
+          aria-describedby={errores.fechaNacimiento ? "error-fechaNacimiento" : undefined}
+        />
+        {errores.fechaNacimiento && <span id="error-fechaNacimiento" style={{ color: "#ff4d4f" }}>{errores.fechaNacimiento}</span>}
+      </div>
+      <div>
         <label htmlFor="club">Club*</label>
-        <select id="club" name="club" value={datos.club} onChange={handleChange} style={estiloInput}>
-          <option value="" disabled>Seleccione un club</option>
-          <option value="Club A">Club A</option>
-          <option value="Club B">Club B</option>
-          <option value="Club C">Club C</option>
+        <select
+          id="club"
+          name="club"
+          value={datos.club || ""}
+          onChange={handleChange}
+          style={errores.club ? estiloInputError : estiloInput}
+          aria-required="true"
+          aria-describedby={errores.club ? "error-club" : undefined}
+        >
+          <option value="">Seleccionar club</option>
+          {clubes.map((club) => (
+            <option key={club} value={club}>{club}</option>
+          ))}
         </select>
-        <div className="error-message">{errores.club}</div>
+        {errores.club && <span id="error-club" style={{ color: "#ff4d4f" }}>{errores.club}</span>}
       </div>
-
-      <button onClick={handleSiguiente} style={{ ...estiloBoton, backgroundColor: 'green', color: '#FFFFFF' }}>
-        Siguiente
-      </button>
-      <button onClick={handleCancelar} style={{ ...estiloBoton, backgroundColor: 'red', color: '#FFFFFF' }}>
-        Cancelar
-      </button>
-    </div>
+      <div>
+        <label htmlFor="localidad">Localidad*</label>
+        <select
+          id="localidad"
+          name="localidad"
+          value={datos.localidad || ""}
+          onChange={handleChange}
+          style={errores.localidad ? estiloInputError : estiloInput}
+          aria-required="true"
+          aria-describedby={errores.localidad ? "error-localidad" : undefined}
+        >
+          <option value="">Seleccionar localidad</option>
+          {localidades.map((loc) => (
+            <option key={loc} value={loc}>{loc}</option>
+          ))}
+        </select>
+        {errores.localidad && <span id="error-localidad" style={{ color: "#ff4d4f" }}>{errores.localidad}</span>}
+      </div>
+      <div>
+        <label htmlFor="telefono">Teléfono*</label>
+        <input
+          id="telefono"
+          name="telefono"
+          type="text"
+          value={datos.telefono || ""}
+          onChange={handleChange}
+          style={errores.telefono ? estiloInputError : estiloInput}
+          aria-required="true"
+          aria-describedby={errores.telefono ? "error-telefono" : undefined}
+        />
+        {errores.telefono && <span id="error-telefono" style={{ color: "#ff4d4f" }}>{errores.telefono}</span>}
+      </div>
+      <div>
+        <button
+          type="submit"
+          style={{
+            ...estiloBoton,
+            backgroundColor: Object.keys(errores).length === 0 ? "#1f3c88" : "#888",
+            color: "#fff"
+          }}
+          disabled={Object.keys(errores).length > 0}
+          aria-label="Siguiente"
+        >
+          Siguiente
+        </button>
+        <button
+          type="button"
+          style={{ ...estiloBoton, backgroundColor: "#ff4d4f", color: "#fff" }}
+          onClick={handleCancelar}
+          aria-label="Cancelar"
+        >
+          Cancelar
+        </button>
+      </div>
+    </form>
   );
 };
 
