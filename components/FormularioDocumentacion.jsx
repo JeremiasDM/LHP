@@ -63,13 +63,13 @@ const FormularioDocumentacion = ({
     <>
       <div style={{ display: 'flex', flexWrap: 'wrap' }}>
         <div style={estiloCaja}>
-          <strong>📇 Carnet*</strong>
+          <strong> Carnet*</strong>
           <input type="file" name="carnet" accept="image/*" onChange={handleFileChange} style={estiloInput} />
           {previewCarnet && <img src={previewCarnet} alt="Previsualización carnet" style={{ maxWidth: '200%', maxHeight: '200px', marginTop: '5px' }} />}
         </div>
 
         <div style={estiloCaja}>
-          <strong>🏥 Ficha Médica*</strong>
+          <strong> Ficha Médica*</strong>
           <input type="file" name="ficha" accept="image/*" onChange={handleFileChange} style={estiloInput} />
           {previewFicha && <img src={previewFicha} alt="Previsualización ficha" style={{ maxWidth: '200%', maxHeight: '200px', marginTop: '5px' }} />}
 
