@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Historia - Liga Recreativa de Handball Punilla</title>
+    <link rel="stylesheet" href="historia.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Historia de la Liga Recreativa de Handball Punilla</h1>
+        </header>
+        <main class="main-content">
+                        <section class="historia-item">
+                <div class="historia-content">
+                    <h2>Fundación de la Liga</h2>
+                    <p class="fecha">15 de mayo de 2018</p>
+                    <p>Esta foto marca la fundación de la Liga. El grupo de seis personas en esta imagen fue clave en la creación de este proyecto.</p>
+                </div>
+                <div class="historia-imagen">
+                    <img src="foto1.jpeg" alt="Foto de la fundación de la liga">
+                </div>
+            </section>
+            
+                        <section class="historia-item reverse">
+                <div class="historia-content">
+                    <h2>Primer Logo</h2>
+                    <p class="fecha">Sin fecha</p>
+                    <p>Este fue el primer logo de nuestra liga. Aunque ahora tenemos uno nuevo, este diseño original representa el inicio de nuestro camino.</p>
+                </div>
+                <div class="historia-imagen">
+                    <img src="foto2.jpeg" alt="Primer logo de la liga con el grupo fundador">
+                </div>
+            </section>
+            
+                        <section class="historia-item">
+                <div class="historia-content">
+                    <h2>Nuevos miembros</h2>
+                    <p class="fecha">Marzo de 2019</p>
+                    <p>En marzo de 2019, dimos la bienvenida a nuevos integrantes que se unieron a la liga. Esta foto muestra al grupo de nuevos miembros.</p>
+                </div>
+                <div class="historia-imagen">
+                    <img src="foto3.jpeg" alt="Foto de nuevos miembros de la liga">
+                </div>
+            </section>
+            
+                        <section class="historia-item reverse">
+                <div class="historia-content">
+                    <h2>Organizando el fixture</h2>
+                    <p class="fecha">Febrero de 2020</p>
+                    <p>Con la llegada de nuevos clubes, nos reunimos en febrero de 2020 para organizar el fixture del año. Fue un momento de crecimiento y planificación para la temporada.</p>
+                </div>
+                <div class="historia-imagen">
+                    <img src="foto4.jpeg" alt="Foto de miembros de la liga organizando el fixture">
+                </div>
+            </section>
+            
+            <section class="historia-item">
+                <div class="historia-content">
+                    <h2>Nuevos integrantes</h2>
+                    <p class="fecha">Mayo del 2022</p>
+                    <p>La liga suma nuevos integrantes.</p>
+                </div>
+                <div class="historia-imagen">
+                    <img src="foto6.jpeg" alt="La liga suma nuevos integrantes">
+                </div>
+            </section>
+
+            <section class="historia-item reverse">
+                <div class="historia-content">
+                    <h2>Primer Torneo de Ligas</h2>
+                    <p class="fecha">Junio de 2023</p>
+                    <p>Seleccionado de la liga punilla en el primer torneo de ligas realizado en Alta Gracia.</p>
+                </div>
+                <div class="historia-imagen">
+                    <img src="foto5.jpeg" alt="Seleccionado de la liga punilla">
+                </div>
+            </section>
+
+            <section class="historia-item">
+                <div class="historia-content">
+                    <h2>Convenio de arbitraje</h2>
+                    <p class="fecha">2025</p>
+                    <p>La liga firma un convenio y tiene sus propios árbitros y ya no depende de los árbitros de la federación.</p>
+                </div>
+                <div class="historia-imagen">
+                    <img src="foto7.jpeg" alt="Firma de convenio con árbitros">
+                </div>
+            </section>
+        </main>
+        <footer class="footer">
+            <p>Liga Recreativa de Handball Punilla - Uniendo a la comunidad a través del deporte.</p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,216 @@
+/* Estilos generales del cuerpo del documento */
+body {
+    font-family: Arial, sans-serif;           /* Fuente principal */
+    background-color: #0B0E19;                /* Fondo azul muy oscuro */
+    display: flex;                            /* Usamos Flexbox para centrar */
+    justify-content: center;                  /* Centrado horizontal */
+    align-items: center;                      /* Centrado vertical */
+    min-height: 100vh;                        /* Altura mínima de toda la pantalla */
+    margin: 0;                                /* Quitamos márgenes por defecto */
+}
+
+/* Contenedor del formulario */
+.form-container {
+    background-color: #1F3C88;                /* Fondo azul vibrante */
+    padding: 30px 40px;                       /* Espaciado interno */
+    border-radius: 10px;                      /* Bordes redondeados */
+    width: 600px;                             /* Ancho fijo del formulario */
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);  /* Sombra para profundidad */
+    color: #FFFFFF;                          /* Texto en blanco */
+    box-sizing: border-box; /* Include padding in the element's total width and height */
+}
+
+/* Estilos generales para el formulario */
+form {
+    display: flex;                            /* Flexbox */
+    flex-direction: column;                   /* Disposición vertical de elementos */
+}
+
+/* Título del formulario */
+h2 {
+    text-align: center;                       /* Centrado de texto */
+    margin-bottom: 25px;                      /* Espacio debajo del título */
+    color: #FFFFFF;                          /* Texto blanco */
+}
+
+/* Etiquetas de los campos */
+label {
+    display: block;                           /* Se muestran como bloque */
+    margin-top: 15px;                         /* Espacio superior */
+    font-weight: bold;                        /* Texto en negrita */
+    color: #FFFFFF;                          /* Texto blanco */
+}
+
+/* Estilos para campos de entrada, select y file */
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="date"],
+select,
+input[type="file"] {
+    width: 100%;                              /* Ocupa todo el ancho disponible */
+    padding: 10px;                            /* Espaciado interno */
+    margin-top: 5px;                          /* Separación con respecto al label */
+    border: 1px solid #5d5d5d;                /* Borde gris oscuro */
+    border-radius: 5px;                       /* Bordes redondeados */
+    font-size: 16px;                          /* Tamaño del texto */
+    background-color: #e0e0e0;                /* Fondo gris claro */
+    color: #000;                              /* Texto negro */
+    box-sizing: border-box; /* Include padding in the element's total width and height */
+}
+
+/* Grupo de botones (Guardar y Cancelar) */
+.button-group {
+    margin-top: 25px;                         /* Espacio superior */
+    display: flex;                            /* Flexbox horizontal */
+    justify-content: space-between;           /* Espacio entre los dos botones */
+}
+
+/* Botón de guardar */
+.btn-guardar {
+    background-color: green;                  /* Fondo verde */
+    color: white;                             /* Texto blanco */
+    border: none;                             /* Sin borde */
+    padding: 10px 25px;                       /* Espaciado interno */
+    font-size: 16px;                          /* Tamaño de fuente */
+    border-radius: 5px;                       /* Bordes redondeados */
+    cursor: pointer;                          /* Cursor de mano al pasar encima */
+    flex: 1; /* Allow buttons to take equal width */
+    margin: 0 5px; /* Add some space between buttons */
+}
+
+/* Botón de cancelar */
+.btn-cancelar {
+    background-color: #dc3545; /* Changed to a standard red for consistency */
+    color: white; /* Changed to white for better contrast */
+    border: none;                             /* Sin borde */
+    padding: 10px 25px;                       /* Espaciado interno */
+    font-size: 16px;                          /* Tamaño de fuente */
+    border-radius: 5px;                       /* Bordes redondeados */
+    cursor: pointer;                          /* Cursor de mano */
+    flex: 1; /* Allow buttons to take equal width */
+    margin: 0 5px; /* Add some space between buttons */
+}
+
+/* Hover para botón guardar */
+.btn-guardar:hover {
+    background-color: darkgreen;              /* Cambia a verde oscuro al pasar el mouse */
+}
+
+/* Hover para botón cancelar */
+.btn-cancelar:hover {
+    background-color: #c82333; /* Darker red on hover */
+}
+
+/* Clase para aplicar animación de entrada */
+.fase {
+    animation: fadeIn 0.3s ease-in-out;       /* Usa animación definida abajo */
+}
+
+/* Definición de la animación de aparición */
+@keyframes fadeIn {
+    from { opacity: 0; }                      /* Desde invisible */
+    to { opacity: 1; }                        /* Hasta completamente visible */
+}
+
+/* Contenedor de la imagen de vista previa */
+.imagen-container {
+    margin-top: 20px;                         /* Espacio superior */
+    text-align: center;                       /* Centrado horizontal */
+}
+
+/* Estilo de la imagen de vista previa */
+#preview {
+    margin-top: 10px;                         /* Espacio superior */
+    max-width: 300px;                         /* Ancho máximo */
+    height: auto;                             /* Altura automática proporcional */
+    border: 1px solid #ccc;                   /* Borde gris claro */
+    border-radius: 5px;                       /* Bordes redondeados */
+}
+
+/* Logo de la liga */
+.logo-liga {
+    display: block;                           /* Se comporta como bloque */
+    margin: 0 auto 20px auto;                 /* Centrado automático con margen inferior */
+    max-width: 150px;                         /* Ancho máximo del logo */
+}
+
+/* Contenedor de la barra de progreso */
+.barra-progreso {
+    display: flex;                            /* Flex horizontal */
+    justify-content: space-between;           /* Espacio uniforme entre pasos */
+    margin-bottom: 30px;                      /* Espacio inferior */
+    position: relative;                       /* Para posicionar ::before sobre la línea */
+}
+
+/* Línea de fondo de la barra de progreso */
+.barra-progreso::before {
+    content: '';                              /* Elemento visual sin contenido */
+    position: absolute;                       /* Posicionamiento absoluto dentro del contenedor */
+    top: 50%;                                 /* Centrado vertical */
+    left: 15px;                               /* Inicio desde 15px del borde izquierdo */
+    right: 15px;                              /* Fin a 15px del borde derecho */
+    height: 4px;                              /* Grosor de la línea */
+    background-color: #ccc;                   /* Color de línea gris */
+    z-index: 0;                               /* Detrás de los pasos */
+    transform: translateY(-50%);              /* Ajuste vertical preciso */
+}
+
+/* Cada paso (círculo) de la barra */
+.paso {
+    z-index: 1;                               /* Encima de la línea de fondo */
+    width: 30px;                              /* Diámetro del círculo */
+    height: 30px;
+    background-color: #ccc;                   /* Fondo gris */
+    color: #000;                              /* Texto negro */
+    border-radius: 50%;                       /* Forma circular */
+    display: flex;                            /* Centrado interno */
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;                        /* Texto en negrita */
+    position: relative;                       /* Para futuros elementos */
+}
+
+/* Estilo del paso activo */
+.paso.activo {
+    background-color: #00cc66;               /* Verde brillante */
+    color: #fff;                             /* Texto blanco */
+}
+
+/* Modal styles */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 999; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0,0,0,0.5); /* Black w/ opacity */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+}
+
+.modal-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    color: #000; /* Black text for modal content */
+}
+
+.modal-content button {
+    margin-top: 15px;
+    padding: 10px 20px;
+    border: none;
+    background-color: #00cc66;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.modal-content button:hover {
+    background-color: darkgreen;
+}

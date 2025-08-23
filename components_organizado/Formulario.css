@@ -1,0 +1,88 @@
+.contenedor-principal {
+  max-width: 800px;
+  margin: auto;
+  padding: 20px;
+  background: #1F3C88;
+  border-radius: 10px;
+  color: #FFFFFF;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+  border: 2px solid #FFFFFF;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 30px;
+}
+
+.error-message {
+  color: red;
+  font-size: 0.85em;
+  min-height: 1em;
+  margin-top: 3px;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+button:active {
+  transform: scale(0.98);
+}
+.documentos-container {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.documento-bloque {
+  background: #0B0E19;
+  padding: 15px;
+  border-radius: 8px;
+  flex: 1 1 300px;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th, td {
+  border: 1px solid #FFFFFF;
+  padding: 8px;
+  text-align: left;
+}
+
+th {
+  background-color: #0B0E19;
+}
+
+button {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+button:active {
+  transform: scale(0.97);
+}
+
+input[type="file"],
+input[type="date"] {
+  margin-bottom: 5px;
+}
+
+div > div > input,
+div > div > button {
+  margin-right: 5px;
+  margin-top: 5px;
+}

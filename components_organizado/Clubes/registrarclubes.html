@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro de Clubes</title>
+    <link rel="stylesheet" href="registrarclubes.css">
+</head>
+<body>
+    <div class="form-container">
+        <img src="Logo_Handball.png" alt="Logo Liga Handball" class="logo-liga">
+        <h2>Registro de Clubes</h2>
+
+        <div class="barra-progreso">
+            <div class="paso activo">1</div>
+            <div class="paso">2</div>
+            <div class="paso">3</div>
+            <div class="paso">4</div>
+        </div>
+
+        <form id="formClub" enctype="multipart/form-data">
+            <div class="fase" id="fase1">
+                <label for="nombre">Nombre del club*</label>
+                <input type="text" id="nombre" placeholder="Ingresar Nombre" required>
+
+                <label for="categoria">Categoría*</label>
+                <select id="categoria" required>
+                    <option value="">Seleccione una categoría</option>
+                    <option value="Masculino">Masculino</option>
+                    <option value="Femenino">Femenino</option>
+                </select>
+
+                <label for="correo">Correo del club*</label>
+                <input type="email" id="correo" placeholder="Ingresar Correo" required>
+
+                <div class="button-group">
+                    <button type="button" class="btn-cancelar" onclick="window.location.reload()">Cancelar</button>
+                    <button type="button" class="btn-guardar" onclick="siguienteFase1()">Siguiente</button>
+                </div>
+            </div>
+
+            <div class="fase" id="fase2" style="display: none;">
+                <label for="localidad">Localidad*</label>
+                <select id="localidad" required>
+                    <option value="">Seleccione una localidad</option>
+                    <option value="Carlos Paz">Carlos Paz</option>
+                    <option value="Cosquín">Cosquín</option>
+                </select>
+
+                <label for="referente">Referente*</label>
+                <input type="text" id="referente" placeholder="Ingresar Nombre del Referente" required>
+
+                <label for="correoReferente">Correo del referente*</label>
+                <input type="email" id="correoReferente" placeholder="Ingresar Correo del Referente" required>
+
+                <div class="button-group">
+                    <button type="button" class="btn-cancelar" onclick="anteriorFase1()">Atrás</button>
+                    <button type="button" class="btn-guardar" onclick="siguienteFase2()">Siguiente</button>
+                </div>
+            </div>
+
+            <div class="fase" id="fase3" style="display: none;">
+                <label for="registro">Fecha de Registro*</label>
+                <input type="date" id="registro" min="2025-01-01" required>
+
+                <label for="telefonoClub">Teléfono del club*</label>
+                <input type="tel" id="telefonoClub" placeholder="Ingresar Teléfono del Club" required>
+
+                <label for="telefonoReferente">Teléfono del referente*</label>
+                <input type="tel" id="telefonoReferente" placeholder="Ingresar Teléfono del Referente" required>
+
+                <div class="button-group">
+                    <button type="button" class="btn-cancelar" onclick="anteriorFase2()">Atrás</button>
+                    <button type="button" class="btn-guardar" onclick="siguienteFase3()">Siguiente</button>
+                </div>
+            </div>
+
+            <div class="fase" id="fase4" style="display: none;">
+                <div class="imagen-container">
+                    <label for="logoSolo">Logo del club*</label>
+                    <input type="file" id="logoSolo" accept="image/*" onchange="mostrarImagen(event)" required>
+                    <img id="preview" alt="Vista previa del logo" style="display:none;">
+                </div>
+
+                <div class="button-group">
+                    <button type="button" class="btn-cancelar" onclick="anteriorFase3()">Atrás</button>
+                    <button type="submit" class="btn-guardar">Guardar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div id="modalExito" class="modal">
+        <div class="modal-content">
+            <h3>Club registrado exitosamente</h3>
+            <button onclick="cerrarModal()">Listo</button>
+        </div>
+    </div>
+
+    <script>
+        function actualizarBarra(fase) {
+            const pasos = document.querySelectorAll('.paso');
+            pasos.forEach((paso, index) => {
+                paso.classList.toggle('activo', index < fase);
+            });
+        }
+
+        function validarCorreo(correo) {
+            return /^[^\s@]+@[^\s@]+\.(com|com\.ar|net|org|edu)$/.test(correo);
+        }
+
+        function siguienteFase1() {
+            const nombre = document.getElementById('nombre').value.trim();
+            const categoria = document.getElementById('categoria').value;
+            const correo = document.getElementById('correo').value.trim();
+            if (!nombre || !categoria || !correo) {
+                alert("Por favor, completá todos los campos obligatorios de esta fase.");
+                return;
+            }
+            if (!validarCorreo(correo)) {
+                alert("Correo del club inválido. Debe contener @ y terminar en .com, .com.ar, .net, .org, o .edu.");
+                return;
+            }
+            document.getElementById('fase1').style.display = 'none';
+            document.getElementById('fase2').style.display = 'block';
+            actualizarBarra(2);
+        }
+
+        function anteriorFase1() {
+            document.getElementById('fase2').style.display = 'none';
+            document.getElementById('fase1').style.display = 'block';
+            actualizarBarra(1);
+        }
+
+        function siguienteFase2() {
+            const localidad = document.getElementById('localidad').value;
+            const referente = document.getElementById('referente').value.trim();
+            const correoReferente = document.getElementById('correoReferente').value.trim();
+            if (!localidad || !referente || !correoReferente) {
+                alert("Por favor, completá todos los campos obligatorios de esta fase.");
+                return;
+            }
+            if (!validarCorreo(correoReferente)) {
+                alert("Correo del referente inválido. Debe contener @ y terminar en .com, .com.ar, .net, .org, o .edu.");
+                return;
+            }
+            document.getElementById('fase2').style.display = 'none';
+            document.getElementById('fase3').style.display = 'block';
+            actualizarBarra(3);
+        }
+
+        function anteriorFase2() {
+            document.getElementById('fase3').style.display = 'none';
+            document.getElementById('fase2').style.display = 'block';
+            actualizarBarra(2);
+        }
+
+        function siguienteFase3() {
+            const registro = document.getElementById('registro').value;
+            const telefonoClub = document.getElementById('telefonoClub').value.trim();
+            const telefonoReferente = document.getElementById('telefonoReferente').value.trim();
+            if (!registro || !telefonoClub || !telefonoReferente) {
+                alert("Por favor, completá todos los campos obligatorios de esta fase.");
+                return;
+            }
+            document.getElementById('fase3').style.display = 'none';
+            document.getElementById('fase4').style.display = 'block';
+            actualizarBarra(4);
+        }
+
+        function anteriorFase3() {
+            document.getElementById('fase4').style.display = 'none';
+            document.getElementById('fase3').style.display = 'block';
+            actualizarBarra(3);
+        }
+
+        function mostrarImagen(event) {
+            const imagen = document.getElementById('preview');
+            const archivo = event.target.files[0];
+            if (archivo) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    imagen.src = e.target.result;
+                    imagen.style.display = 'block';
+                };
+                reader.readAsDataURL(archivo);
+            }
+        }
+
+        document.getElementById('formClub').addEventListener('submit', function(e) {
+            e.preventDefault();
+            // Basic validation for the last phase before showing the modal
+            const logoSolo = document.getElementById('logoSolo').value;
+            if (!logoSolo) {
+                alert("Por favor, subí el logo del club.");
+                return;
+            }
+            document.getElementById('modalExito').style.display = 'flex';
+        });
+
+        function cerrarModal() {
+            document.getElementById('modalExito').style.display = 'none';
+            window.location.reload(); // Reloads the page to reset the form
+        }
+    </script>
+</body>
+</html>
+
